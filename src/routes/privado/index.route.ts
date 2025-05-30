@@ -8,13 +8,15 @@ import rota_compartilhadas from "./compartilhado.route";
 const rota_privadas = Router();
 
 rota_privadas.use(
+  "/admin",
   (req, res, next) => permissao(req, res, next, ERole.ADMIM),
   admin_rotas
 ); //Somente Admin
 rota_privadas.use(
+  "/user",
   (req, res, next) => permissao(req, res, next, ERole.USER),
   usuario_rotas
 ); //Somente usuários
-rota_privadas.use(permissao, rota_compartilhadas); //Ambos
+rota_privadas.use("/shared", permissao, rota_compartilhadas); //Ambos
 
 export default rota_privadas;
