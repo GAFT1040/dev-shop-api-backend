@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   buscarTodos,
   buscarPorId,
-} from "../../controllers/categoria.controller";
+} from "../../controllers/publico/categoria.controller";
 
 const categoria_router = Router();
 

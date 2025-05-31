@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import * as service from "../services/categoria.service";
+import * as service from "../../services/publico/categoria.service";
 
 async function buscarTodos(req: Request, res: Response) {
   const data = service.buscarTodos();

@@ -1,4 +1,4 @@
-import { ICategoria } from "../types/categoria";
+import { ICategoria } from "../../types/categoria";
 
 const data: ICategoria[] = [
   {
