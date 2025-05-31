@@ -1,10 +1,12 @@
-import { Response, Router } from "express";
+import { Router } from "express";
+import {
+  buscarTodos,
+  buscarPorId,
+} from "../../controllers/categoria.controller";
 
 const categoria_router = Router();
 
-categoria_router.get("/", (_, res: Response) => {
-  res.sendStatus(200);
-});
-categoria_router.get("/:id", (_, res: Response) => {});
+categoria_router.get("/", buscarTodos);
+categoria_router.get("/:id", buscarPorId);
 
 export default categoria_router;
