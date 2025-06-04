@@ -1,8 +1,10 @@
 import "dotenv/config";
 import { Request, Response, NextFunction } from "express";
-import { ERole, IUsuario } from "../types/user";
+import { IUsuario } from "../types/user";
 import jwt from "jsonwebtoken";
 import { IPayload } from "../types/payload";
+import usuarioRepository from "../repository/usuario.repository";
+import { AppError } from "../utils/appError";
 
 declare global {
   namespace Express {
@@ -12,7 +14,11 @@ declare global {
   }
 }
 
-export default function auth(req: Request, res: Response, next: NextFunction) {
+export default async function auth(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const header = req.headers;
   const authorization = header.authorization;
 
@@ -31,22 +37,24 @@ export default function auth(req: Request, res: Response, next: NextFunction) {
   try {
     const chave = process.env.JWT_SECRET;
 
-    if (!chave) throw new Error("Chave secreta do JWT não foi especeficada");
+    if (!chave) throw new Error();
 
-    const decoded = jwt.verify(token, chave) as IPayload;
+    const { id } = jwt.verify(token, chave) as IPayload;
 
-    const usuario: IUsuario = {
-      id: 0,
-      nome: "",
-      email: "",
-      role: ERole.ADMIM,
+    if (!id || typeof id !== "number") throw new Error();
+
+    const usuario_db = await usuarioRepository.buscarPorID(id);
+
+    if (!usuario_db) throw new Error();
+
+    req.usuario = {
+      id: usuario_db.id,
+      nome: usuario_db.nome_completo,
+      admin: usuario_db.admin,
+      email: usuario_db.email,
     };
-
-    req.usuario = usuario;
-
-    console.log(decoded);
   } catch (error) {
-    res.sendStatus(401);
+    throw new AppError("Não autorizado", 401);
   }
 
   next();

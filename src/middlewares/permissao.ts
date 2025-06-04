@@ -1,16 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { ERole } from "../types/user";
+import { AppError } from "../utils/appError";
 
 export default function permissao(
   req: Request,
   res: Response,
   next: NextFunction,
-  necPermissao?: ERole
+  isAdmin: boolean
 ) {
-  if (req.usuario!.role !== necPermissao) {
-    res.sendStatus(403);
-    return;
-  }
-
+  if (req.usuario!.admin !== isAdmin)
+    throw new AppError("Usuário sem permissão de acesso!");
   next();
 }

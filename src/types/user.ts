@@ -1,11 +1,6 @@
-export enum ERole {
-  USER = "U",
-  ADMIM = "A",
-}
-
 export interface IUsuario {
-  id: number | undefined;
+  id: number;
   nome: string;
   email: string;
-  role: ERole;
+  admin: boolean;
 }
